@@ -5,17 +5,16 @@ const GameBoard = () => {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [currentPlayer, setCurrentPlayer] = useState('X');
   const [gameOver, setGameOver] = useState(false);
+  const [scores, setScores] = useState({ X: 0, O: 0, Ties: 0 });
 
   const handlePress = (index) => {
     if (board[index] || gameOver) {
       Alert.alert('Invalid move!', 'This spot is already taken or the game is over.');
       return;
     }
-
     const newBoard = [...board];
     newBoard[index] = currentPlayer;
     setBoard(newBoard);
-
     setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X');
   };
 
@@ -30,14 +29,12 @@ const GameBoard = () => {
       [0, 4, 8],
       [2, 4, 6],
     ];
-
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
       if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
         return squares[a];
       }
     }
-
     return null;
   };
 
@@ -51,22 +48,25 @@ const GameBoard = () => {
     const winner = checkForWinner(board);
     if (winner) {
       Alert.alert(`Player ${winner} has won!`);
+      setScores((prevScores) => ({ ...prevScores, [winner]: prevScores[winner] + 1 }));
       setGameOver(true);
     } else if (!board.includes(null)) {
       Alert.alert("It's a tie!");
+      setScores((prevScores) => ({ ...prevScores, Ties: prevScores.Ties + 1 }));
       setGameOver(true);
     }
   }, [board]);
 
   return (
     <View style={styles.container}>
+      <View style={styles.scoreboard}>
+        <Text style={styles.scoreText}>X Wins: {scores.X}</Text>
+        <Text style={styles.scoreText}>O Wins: {scores.O}</Text>
+        <Text style={styles.scoreText}>Ties: {scores.Ties}</Text>
+      </View>
       <View style={styles.board}>
         {board.map((cell, index) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.cell}
-            onPress={() => handlePress(index)}
-          >
+          <TouchableOpacity key={index} style={styles.cell} onPress={() => handlePress(index)}>
             <Text style={styles.cellText}>{cell}</Text>
           </TouchableOpacity>
         ))}
@@ -82,7 +82,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingBottom: 20, // Add some padding at the bottom for the button
+    paddingBottom: 20,
+  },
+  scoreboard: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginBottom: 20,
+  },
+  scoreText: {
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   board: {
     width: 300,
