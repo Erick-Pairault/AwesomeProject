@@ -44,6 +44,14 @@ const GameBoard = () => {
     setGameOver(false);
   };
 
+  const resetScore = () => {
+    setScores({
+      X: 0,
+      Y: 0,
+      Ties: 0,
+    })
+  }
+
   useEffect(() => {
     const winner = checkForWinner(board);
     if (winner) {
@@ -72,14 +80,19 @@ const GameBoard = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <View style={{ marginTop: 10 }}>
-        <Button title="Restart Game" onPress={restartGame} color="#981E32" />
+      <View style={styles.buttonView}>
+        <View style={{ marginRight: 10 }}><Button title="Restart Game" onPress={restartGame} color="#981E32" /></View>
+        <Button title="Reset Score" onPress={resetScore} color="#981E32" />
       </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonView: {
+    marginTop: 10,
+    flexDirection: 'row',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
