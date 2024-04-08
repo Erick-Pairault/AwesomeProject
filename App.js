@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text, Alert, Button } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text, Alert, Button, Image } from 'react-native';
 
 const GameBoard = () => {
   const [board, setBoard] = useState(Array(9).fill(null));
@@ -59,6 +59,7 @@ const GameBoard = () => {
 
   return (
     <View style={styles.container}>
+      <Image source={require('./assets/wsu.png')} style={styles.logo} />
       <View style={styles.scoreboard}>
         <Text style={styles.scoreText}>X Wins: {scores.X}</Text>
         <Text style={styles.scoreText}>O Wins: {scores.O}</Text>
@@ -71,7 +72,9 @@ const GameBoard = () => {
           </TouchableOpacity>
         ))}
       </View>
-      <Button title="Restart Game" onPress={restartGame} color="#981E32" />
+      <View style={{ marginTop: 10 }}>
+        <Button title="Restart Game" onPress={restartGame} color="#981E32" />
+      </View>
     </View>
   );
 };
@@ -83,6 +86,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingBottom: 20,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
   },
   scoreboard: {
     flexDirection: 'row',
