@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text, Alert } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Text, Alert, Button } from 'react-native';
 
 const GameBoard = () => {
   const [board, setBoard] = useState(Array(9).fill(null));
@@ -41,6 +41,12 @@ const GameBoard = () => {
     return null;
   };
 
+  const restartGame = () => {
+    setBoard(Array(9).fill(null));
+    setCurrentPlayer('X');
+    setGameOver(false);
+  };
+
   useEffect(() => {
     const winner = checkForWinner(board);
     if (winner) {
@@ -65,6 +71,7 @@ const GameBoard = () => {
           </TouchableOpacity>
         ))}
       </View>
+      <Button title="Restart Game" onPress={restartGame} color="#981E32" />
     </View>
   );
 };
@@ -75,6 +82,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingBottom: 20, // Add some padding at the bottom for the button
   },
   board: {
     width: 300,
